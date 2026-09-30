@@ -178,24 +178,37 @@ class Odometry:
 # grid_map.py
 class GridMap:
     def __init__(self, center_x=config.START_X, center_y=config.START_Y, size=config.MAP_SIZE, res=config.MAP_RES)
-    def update(self, pose, ranges) -> None         # 매 step. pose·ranges가 None이면 무시
+    def update(self, pose, ranges) -> None         # 매 step. None이나 유한하지 않은 pose는 무시
     def to_cell(self, x, y) -> tuple[int, int]     # (row, col)
     def to_world(self, row, col) -> tuple[float, float]   # 칸 중심
     def layers(self) -> tuple                      # (occ, blocked, soft, unknown) bool 배열
     def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...] 크기 내림차순
     def public(self) -> np.ndarray                 # 공개값 격자 int8 (-1/0/1). viz.render_map() 입력
     def clearance(self) -> np.ndarray              # 가장 가까운 장애물까지 거리 [m]
+    def frontier_sizes(self) -> np.ndarray         # 칸별 프론티어 묶음 칸 수 (아니면 0)
+    def invalidate(self) -> None                   # logodds·seen을 직접 수정한 뒤 호출
+    version: int                                   # update()마다 증가
+    plan_version: int                              # 장애물·확인 분류가 바뀔 때만 증가. 같으면 계획 캐시 재사용
 
 # planner.py  (목표 1개: A*, 목표 여러 개: 다익스트라)
 def plan(grid, start_xy, goal_xy, allow_unknown=False, field=None) -> list[tuple] | None
-# [(x, y), ...] PATH_STEP 간격, 첫 점 = start_xy. 통과 불가 시작·목표는 SNAP_RADIUS 안 대체 칸 경유
-# field: goal_xy 기준 DistanceField를 주면 A* 휴리스틱으로 사용 (같은 비용, 계산 시간 감소)
+# [(x, y), ...] PATH_STEP 이하 간격, 첫 점 = start_xy. 경로 없음·NaN·지도 밖이면 None (예외 없음)
+# 경로 선분이 지나가거나 닿는 모든 칸은 팽창 영역 밖 (다듬기 뒤에도 같은 규칙)
+# 통과 불가 시작·목표: SNAP_RADIUS 안에서 사이에 장애물 칸이 없는 가장 가까운 칸으로 대체
+#   목표를 옮기면 끝점은 대체 칸 중심 (path[-1] != goal_xy). 벽 반대편 칸은 선택하지 않음
+# field: 목표·지도 상태·영역이 맞는 DistanceField만 A* 휴리스틱으로 사용. 아니면 무시
 def choose_frontier(grid, pose, blacklist) -> tuple | None                     # (x, y)
-# 로봇 기준 다익스트라로 점수 = 묶음 크기 / 경로 거리 최대 칸 선택. 상한 도달 시 조기 종료
+def choose_frontier_path(grid, pose, blacklist) -> tuple | None                # ((x, y), 경로)
+# 로봇 기준 다익스트라 1회로 점수 = 묶음 크기 / 경로 비용 최대 칸과 그 경로를 함께 반환
+# None이면 도달 가능한 프론티어 없음. 목표는 유지하고 재계획은 plan(grid, pose, target) 사용
+def path_length(path) -> float | None              # 실제 경로 길이 [m]. 시간 추정용
 class DistanceField:                               # 기준점 다익스트라 1회
-    def __init__(self, grid, origin_xy)            # RETURN: origin = 시작점, 2초 주기 갱신
-    def distance(self, xy) -> float | None         # 기준점까지 경로 비용 [m] (RETURN_RESERVE 판단)
-    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로. 모르는 칸 통과 허용
+    def __init__(self, grid, origin_xy)            # RETURN: origin = 시작점. 사용 직전에 생성
+    def distance(self, xy) -> float | None         # 가중 비용 [m] (벽 근처·모르는 칸 배수 포함, 길이 아님)
+    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로. 지도가 바뀌었으면 None
+    def is_current(self) -> bool                   # 생성 이후 plan_version 유지 여부
+# 복귀: plan(grid, pose[:2], start_xy, allow_unknown=True, field=DistanceField(grid, start_xy))
+# pure_pursuit 도착 판정은 GOAL_TOL(0.15 m). 복귀 판정 0.12 m는 미션에서 처리
 
 # local_control.py
 def pure_pursuit(pose, path, lookahead=config.LOOKAHEAD) -> tuple[float, float, bool]   # (v, w, reached)
