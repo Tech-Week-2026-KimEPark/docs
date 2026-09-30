@@ -44,7 +44,7 @@ H 하한이 상한보다 크면 0을 넘는 범위로 보고 두 범위 (0~상�
 | 단계 | 동작 | 다음 단계 조건 |
 |---|---|---|
 | SCAN | `TUNER_SCAN_W`로 제자리 좌회전 | 대상 검출 → ALIGN. `TUNER_SCAN_TURNS`회전 동안 미검출 → 종료 |
-| ALIGN | 각속도 $\omega = k eta$로 제자리 회전. $k$는 `TUNER_ALIGN_GAIN` | $\lvertetavert$ ≤ `TUNER_ALIGN_TOL` → APPROACH |
+| ALIGN | 각속도 $\omega = k \beta$로 제자리 회전. $k$는 `TUNER_ALIGN_GAIN` | $\lvert \beta \rvert$ ≤ `TUNER_ALIGN_TOL` → APPROACH |
 | APPROACH | `TUNER_APPROACH_V`로 전진하며 같은 식으로 방향 보정. 방위각이 허용 오차의 4배를 넘으면 정지 후 재정렬 | 추정 거리 ≤ `TUNER_STOP_DIST` → 측정 후 종료 |
 
 - APPROACH 진입 시 현재 추정 거리보다 먼 측정 지점은 건너뜀
