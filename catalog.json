@@ -100,7 +100,7 @@
     },
     {
       "path": "human/explanation/사람-회피-설계.md",
-      "title": "이동하는 사람 회피 설계",
+      "title": "움직이는 물체 회피 설계",
       "audience": "human",
       "type": "explanation"
     },

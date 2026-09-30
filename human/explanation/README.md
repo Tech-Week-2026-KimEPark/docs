@@ -6,5 +6,5 @@
 
 - [기능 문서](features/README.md)
 - [sar-robot 병합 내용 분석](sar-robot-병합-분석.md)
-- [이동하는 사람 회피 설계](사람-회피-설계.md)
+- [움직이는 물체 회피 설계](사람-회피-설계.md)
 - [장애 조사 기록](troubleshooting/README.md)
