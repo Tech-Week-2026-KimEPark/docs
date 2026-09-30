@@ -314,9 +314,12 @@ class Confirm:
     # 위치 추정 = 거리 가중 평균 (6장)
 
 # mission.py
+def fit_compass(samples) -> tuple[int, float, float] | None   # (sign, offset, scale). 시작 회전 표본으로 나침반 보정
+def compass_heading(vec, sign, offset) -> float                # 보정된 방향 [rad]
 class Mission:
+    def __init__(self, io, odom, grid, detector, log=None)     # log: 로그 함수. sar_main이 print 전달
     def tick(self) -> None
-    # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식 → 상태 머신 → 안전 필터 → drive
+    # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식(YOLO_EVERY step) → 상태 머신 → 안전 필터 → drive
 ```
 
 ### 7.3 sar-robot 반영 상태
@@ -332,7 +335,7 @@ sar-robot 코드와 문서는 이 문서 기준으로 변경했습니다. 모듈
 | 방향 범위 | `atan2(sin, cos)`로 $[-\pi, \pi]$ 정리 | sar-robot #5 |
 | 설정값 | 10장 설정값 전체. `GRID_RESOLUTION` → `MAP_RES` | sar-robot #5 |
 
-`grid_map.py`와 `planner.py`의 동작과 검증 결과는 [grid_map 기능 설명](../explanation/features/grid_map.md)과 [planner 기능 설명](../explanation/features/planner.md)에 있습니다. `public()`, `clearance()`, `DistanceField`, `plan()`의 `field` 인자는 기존 형식을 유지한 추가 인터페이스입니다. `mission.py`는 아직 구현 전입니다. 담당자는 7.2절 형식으로 구현하십시오.
+`grid_map.py`와 `planner.py`의 동작과 검증 결과는 [grid_map 기능 설명](../explanation/features/grid_map.md)과 [planner 기능 설명](../explanation/features/planner.md)에 있습니다. `public()`, `clearance()`, `DistanceField`, `plan()`의 `field` 인자는 기존 형식을 유지한 추가 인터페이스입니다. `mission.py`의 상태 전환, 나침반 보정, Webots 검증 결과는 [mission 기능 설명](../explanation/features/mission.md)에 있습니다.
 
 ## 8. 상태 머신
 
@@ -422,6 +425,23 @@ L_FREE = -0.4                 # 지나간 칸 log-odds 증분 (확률 약 0.40)
 L_MIN, L_MAX = -2.0, 3.5      # 확률 약 0.12 ~ 0.97에서 고정
 OCC_THRESHOLD = 0.3           # 이보다 크면 장애물 (확률 약 0.57)
 
+# 미션 상태 머신 (추가)
+INIT_SPIN_W = 0.8             # rad/s, 시작 제자리 회전 속도
+COMPASS_SCALE_TOL = 0.5       # 오도메트리/나침반 회전 비율이 1에서 이만큼 벗어나면 나침반 미사용
+REPLAN_PERIOD = 2.0           # s, 프론티어 선택·경로 재계획 주기
+FRONTIER_TIMEOUT = 30.0       # s, 같은 프론티어 목표 제한 시간
+APPROACH_TIMEOUT = 60.0       # s, 대상 접근 제한 시간
+RESCUE_HOLD = 2.0             # s, 구조 정지 시간
+RETURN_TOL = 0.12             # m, 시작점 도착 판정
+FACE_TOL = 0.1                # rad, 정면 정렬 허용 오차
+FACE_GAIN = 1.5               # 1/s, 정렬 각속도 이득
+CANDIDATE_DROP_DIST = 0.8     # m, 미확정 후보 삭제 거리
+STUCK_TIME, STUCK_DIST = 4.0, 0.05   # s, m. 정체 판정
+BLOCKED_TIME = 3.0            # s, 안전 필터 연속 차단 재계획
+RECOVERY_BACK_TIME = 1.0      # s, 후진 시간
+RECOVERY_TURN_TIME = 1.5      # s, 회전 시간
+TRAJ_STEP = 0.10              # m, 궤적 기록 간격
+
 HEADING_Q = 0.01 ** 2         # 방향 예측 잡음 (한 스텝, rad^2)
 HEADING_R = 0.05 ** 2         # 나침반 관측 잡음 (rad^2)
 SCAN_MATCH = False            # 오차 0.3 m 이상 확인 시 True
@@ -487,6 +507,8 @@ OpenCV 기준 범위(H 0~179, S·V 0~255)입니다. YOLO 상자 안 색 판별�
 - 센서 값이나 경로가 `None`일 때의 동작을 정의함. 예외로 종료하지 않음
 - 모든 `while` 루프에 반복 상한이나 시간 제한을 둠
 - 상태 전환 로그 형식은 `[t=12.3s] EXPLORE -> APPROACH (red at -5.34,-10.54)`로 통일함
+- Webots 동작 검증은 `worlds/sar_apartment.wbt`(apartment.wbt에 `sar_main` 컨트롤러 지정)로만 수행함. `sar_dev.wbt` 결과는 검증으로 인정하지 않음
+- 헤드리스로 실행한 Webots는 직접 실행한 프로세스만 PID로 종료함
 
 이름 규칙과 코드 형식(ruff)은 sar-robot [코드 작성 규칙](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/code-conventions.md)을 따릅니다. 폴더 구조와 Python 버전은 이 문서가 기준입니다.
 

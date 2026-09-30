@@ -25,6 +25,7 @@ sar-robot에서 구현한 기능별 동작과 검증 결과를 설명하는 문�
 | 검증 결과 | 실행한 명령과 결과만 기재. 실행하지 않은 항목은 "미확인"으로 구분 |
 | 수식 | LaTeX 표기 ([문서 작성 안내](../../how-to/write-docs.md) 수식 표기 절) |
 | 저장소 작업 | docs 저장소의 `docs/<모듈 이름>-feature` 브랜치와 PR. sar-robot PR 본문에 docs PR 링크 기재 |
+| 병합 순서 | docs PR을 코드 PR보다 먼저 병합. 코드 저장소 문서가 아직 없는 docs 파일을 연결하면 docs 사이트 검사(`check_docs.py --workspace`)가 실패 |
 
 문서를 추가하면 이 파일의 목록에 한 줄을 추가하고 docs 저장소에서 다음 명령을 실행하십시오.
 
@@ -74,6 +75,7 @@ python3 scripts/check_docs.py --workspace
 
 | 문서 | 모듈 | 담당 | 내용 |
 |---|---|---|---|
+| [mission 기능 설명](mission.md) | `sar/mission.py` | 통합 | 상태 머신, 모듈 통합, 나침반 보정, apartment 월드 완주 검증 |
 | [grid_map 기능 설명](grid_map.md) | `sar/grid_map.py` | 계획 | 라이다 log-odds 점유 격자, 장애물 팽창, 프론티어 검출 |
 | [planner 기능 설명](planner.md) | `sar/planner.py` | 계획 | A\* 경로, 다익스트라 프론티어 선택, 복귀 거리 지도 |
 | [perception 기능 설명](perception.md) | `sar/perception.py` | 인지 | 빨간 사과 검출, 거리·방위각, 연속 확인, 대상 월드 좌표 |
