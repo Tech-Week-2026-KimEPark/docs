@@ -72,4 +72,8 @@ python3 scripts/check_docs.py --workspace
 
 ## 목록
 
-아직 작성한 기능 문서가 없습니다. 2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.
+- [perception](perception.md): 빨간 사과 검출, 거리·방위각, 연속 확인, 대상 월드 좌표
+- [viz](viz.md): 지도·궤적·구조 위치 그림 저장
+- [hsv_tuner](hsv_tuner.md): HSV 임계값 튜닝, 인식 성능 측정, 자동 접근·회전 측정
+
+2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.
