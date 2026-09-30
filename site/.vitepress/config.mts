@@ -64,6 +64,8 @@ export default defineConfig({
     ['style', {}, `:root { --dd-primary: ${site.primaryColor}; }`]
   ] as any,
   markdown: {
+    // $...$ 인라인 수식, $$...$$ 블록 수식. markdown-it-mathjax3가 빌드 시 SVG로 변환
+    math: true,
     anchor: { slugify },
     config(md) {
       md.core.ruler.after('inline', 'source-links', state => {

@@ -34,6 +34,14 @@ jobs:
           path: PNU-TECHWEEK-260930
           fetch-depth: 0
           persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Tech-Week-2026-KimEPark/sar-robot
+          ref: main
+          token: ${{ secrets.DOCS_SOURCE_TOKEN || github.token }}
+          path: sar-robot
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version-file: docs/.nvmrc

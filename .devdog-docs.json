@@ -1,7 +1,7 @@
 {
   "files": {
     ".github/workflows/docs-check.yml": "7ad5210cf1f4cd41b7221662c13b79b4d9f966393a745122170dfc1d5ad273d6",
-    ".github/workflows/docs-pages.yml": "c7e5562b253783f440b86b3ff4a8083313fde61bf7658396e138203ab30554fa",
+    ".github/workflows/docs-pages.yml": "9063544288ff1f2c7b569005172ff131c03cfaef8db14549d9e638ef3f57884e",
     ".nvmrc": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56",
     "package-lock.json": "4bc1b630763515b69fa1dce18f2086d174a8056085ea477b4f770fc833ef2ce0",
     "package.json": "5f2e30dac258b78d012dd5200cb34e4f2db9a555467ceb6eabade290d612dd26",

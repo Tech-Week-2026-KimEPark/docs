@@ -93,6 +93,30 @@
       "type": "reference"
     },
     {
+      "path": "human/reference/team/README.md",
+      "title": "팀 규칙",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/reference/team/collaboration.md",
+      "title": "협업 규칙",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/reference/team/git-workflow.md",
+      "title": "Git 작업 규칙",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/reference/team/roles.md",
+      "title": "역할과 담당 범위",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
       "path": "human/tutorials/README.md",
       "title": "시작하기",
       "audience": "human",
