@@ -81,5 +81,6 @@ python3 scripts/check_docs.py --workspace
 | [perception 기능 설명](perception.md) | `sar/perception.py` | 인지 | 빨간 사과 검출, 거리·방위각, 연속 확인, 대상 월드 좌표 |
 | [viz 기능 설명](viz.md) | `sar/viz.py` | 인지 | 지도·궤적·구조 위치 그림 저장 |
 | [hsv_tuner 기능 설명](hsv_tuner.md) | `controllers/hsv_tuner/` | 인지 | HSV 임계값 튜닝, 인식 성능 측정, 자동 접근·회전 측정 |
+| [sar_eval 기능 설명](sar_eval.md) | `controllers/sar_eval/`, `scripts/design_eval.py` | 통합 | 설계 근거 측정 컨트롤러, 실제 pose 기록, 조건별 재계산·그래프 |
 
 2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.

@@ -468,7 +468,7 @@ YOLO 상자 안 색 판별과 색 분할 대체 검출에 공통으로 사용합
 11. PR 전 저장소 루트에서 `ruff format .`, `ruff check .`, `pytest -q` 통과
 12. 브랜치 `<type>/<내용>`, 커밋 제목 `type(scope): 명사형 요약`. 브랜치·커밋에 AI 도구 이름과 서명 금지
 13. 기능 1개를 구현하면 같은 작업에서 docs 저장소 `human/explanation/features/<모듈 이름>.md`에 기능 문서 작성. docs PR을 코드 PR보다 먼저 병합
-14. Webots 동작 검증은 `worlds/sar_apartment.wbt`(apartment.wbt에 `sar_main` 컨트롤러 지정)로만 수행. `sar_dev.wbt` 결과는 검증으로 인정하지 않음
+14. Webots 동작 검증은 `worlds/sar_apartment.wbt`(apartment.wbt에 `sar_main` 컨트롤러 지정)로만 수행. `sar_dev.wbt` 결과는 검증으로 인정하지 않음. 실제 pose가 필요한 설계 근거 측정은 `worlds/sar_apartment_eval.wbt`(같은 `Mission`, 로봇 `supervisor TRUE`, 컨트롤러 `sar_eval`)로 수행하고 결과에 월드 이름과 `SAR_EVAL_MODE`를 표기
 15. 헤드리스로 실행한 Webots는 직접 실행한 프로세스만 PID로 종료. `pkill -f webots` 금지
 
 ---
