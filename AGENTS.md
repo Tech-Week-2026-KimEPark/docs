@@ -24,6 +24,10 @@
 5. 완료 보고에 갱신한 문서와 검사 결과를 포함하십시오. 문서 변경이 불필요한 경우에는 이유를 적으십시오. 접근 제한으로 갱신하지 못했다면 미완료 항목으로 보고하십시오.
 <!-- devdog-docs:end docs-update -->
 
+## 기능 구현 문서
+
+코드 저장소(sar-robot)에서 기능 1개를 구현하면 같은 작업에서 `human/explanation/features/<모듈 이름>.md`를 작성하거나 갱신하십시오. 사용자의 별도 요청을 기다리지 마십시오. 작성 대상, 구성, 검사 절차는 [기능 문서](human/explanation/features/README.md)를 따르십시오.
+
 <!-- devdog-docs:begin incident -->
 ## 장애 기록
 
