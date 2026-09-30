@@ -20,6 +20,7 @@ AI도 사람용 문서를 원본으로 참고합니다. 제품 규칙이나 API 
 | 문서 작성·이동 | [작성 안내](../human/how-to/write-docs.md) · [원본 위치](../human/reference/document-locations.md) |
 | 장애 조사 | [장애 조사 기록](../human/explanation/troubleshooting/README.md) |
 | 해커톤 과제 구현·CONTEXT.md 작성 | [과제와 구현 기준](../human/reference/sar-과제-구현-기준.md) |
+| 기능 구현 후 기능 문서 작성 | [기능 문서](../human/explanation/features/README.md) |
 
 ## 검색용 목록
 

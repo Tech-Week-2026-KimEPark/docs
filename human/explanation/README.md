@@ -4,5 +4,6 @@
 
 ## 목록
 
+- [기능 문서](features/README.md)
 - [sar-robot 병합 내용 분석](sar-robot-병합-분석.md)
 - [장애 조사 기록](troubleshooting/README.md)
