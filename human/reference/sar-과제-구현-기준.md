@@ -1,6 +1,6 @@
 # SAR 해커톤 과제와 구현 기준
 
-PNU TECH WEEK 2026 Search & Rescue 해커톤의 확정 과제, 평가 기준, 제출물 요건, 역할 분담, 팀 구현 기준을 정리한 문서입니다. 기존 팀 규칙 파일 `CONTEXT.md`에 대회 공지 내용을 반영했습니다. AI 대화에 첨부하는 `CONTEXT.md`는 이 문서와 sar-robot [모듈 인터페이스](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/interfaces.md)를 기준으로 갱신하십시오.
+PNU TECH WEEK 2026 Search & Rescue 해커톤의 확정 과제, 평가 기준, 제출물 요건, 역할 분담, 팀 구현 기준을 정리한 문서입니다. 기존 팀 규칙 파일 `CONTEXT.md`에 대회 공지 내용을 반영했습니다. 코드 구조, 모듈 인터페이스, Python 버전은 `CONTEXT.md`가 기준입니다(2026-09-30 결정). sar-robot의 현재 코드·문서와 다른 항목은 7.3절에 있습니다. AI 대화에 첨부하는 `CONTEXT.md`와 이 문서는 같은 내용을 유지하십시오.
 
 ## 1. 과제 정의
 
@@ -45,8 +45,8 @@ PNU TECH WEEK 2026 Search & Rescue 해커톤의 확정 과제, 평가 기준, �
 
 | 제출물 | 내용 | 주의 사항 |
 |---|---|---|
-| 컨트롤러 | Webots 컨트롤러 폴더 | 월드 파일 로봇의 `controller` 필드와 폴더 이름 일치 |
-| Python 파일 | 컨트롤러가 사용하는 모듈 전체 | 컨트롤러 폴더 밖 모듈의 포함 여부 확인 (14장) |
+| 컨트롤러 | `controllers/sar_main/` 폴더 | 월드 파일 로봇의 `controller` 필드를 `sar_main`으로 지정 |
+| Python 파일 | `controllers/sar_main/sar/` 모듈 전체 | 모든 모듈을 컨트롤러 폴더 안에 배치 (7.1절) |
 | README | 평가 환경에서 그대로 시연할 수 있는 전체 절차 | 평가 비중이 큰 제출물 |
 
 ### 3.1 README 필수 항목
@@ -56,7 +56,7 @@ PNU TECH WEEK 2026 Search & Rescue 해커톤의 확정 과제, 평가 기준, �
 | 실행 환경 | OS, Webots R2025a, Python 3.10, 패키지 버전 |
 | 설치 | 가상환경 생성과 패키지 설치 명령. 복사해 그대로 실행 가능한 형태 |
 | YOLO 가중치 | `models/YOLO/yolo11n.pt` 위치와 파일이 없을 때 받는 방법 |
-| 실행 | 월드 파일 열기, 로봇 `controller` 필드 지정, 시뮬레이션 시작 |
+| 실행 | 월드 파일 열기, 로봇 `controller` 필드를 `sar_main`으로 지정, 시뮬레이션 시작 |
 | 설정 변경 | 시작 위치·방향, 대상 색·개수, 제한 시간의 `config.py` 항목명 |
 | 결과 확인 | 상태 전환 로그 예시, 지도 이미지 저장 경로 |
 | 동작 원리 | 상태 머신, 지도 작성, 탐색, 인식, 복귀 방식 |
@@ -119,7 +119,7 @@ PNU TECH WEEK 2026 Search & Rescue 해커톤의 확정 과제, 평가 기준, �
 | 빨간 사과 위치 | (−12.02, −3.02), (−5.34, −10.54). 두 사과 사이 거리 약 10.1 m |
 | 방해 요소 | 식탁 위 Apple 모델 2개 (z ≈ 0.83), Orange 모델, 축구공, 캔·맥주병, 고양이, 소 모형 |
 | 보행자 | 1명. 0.2 m/s로 복도와 방 사이를 정해진 경로로 왕복 |
-| 로봇 컨트롤러 | 기본값 `tb3_teleop`. 팀 컨트롤러 이름으로 변경 필요 |
+| 로봇 컨트롤러 | 기본값 `tb3_teleop`. `sar_main`으로 변경 필요 |
 
 빨간 사과 좌표는 인식 결과의 위치 오차를 확인하는 용도입니다. 코드에 좌표를 직접 입력하지 마십시오. 사과 좌표와 로봇 정의는 2026-09-30 sar-robot `chore/intro-environment` 브랜치의 월드 파일에서 확인했습니다.
 
@@ -163,7 +163,17 @@ bgr = cv2.cvtColor(frame, cv2.COLOR_BGRA2BGR)
 
 ## 6. 좌표·계산식
 
-기본 좌표·단위 규칙의 원본은 sar-robot [모듈 인터페이스](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/interfaces.md)입니다. 월드 좌표는 Webots 월드 좌표 $(x, y)$ [m]이고, 방향 $\theta$는 반시계 방향이 양수입니다. 격자 지도는 `grid[row][col]`, 해상도 0.05 m, 시작점 중심 32 m 정사각형(640 × 640칸)입니다. 시간은 모두 `robot.getTime()` 시뮬레이션 시간 기준입니다.
+모든 모듈은 다음 좌표·단위 규칙을 따릅니다.
+
+| 항목 | 규칙 |
+|---|---|
+| 월드 좌표 | Webots 월드 좌표 $(x, y)$ [m]. 시작 위치로 초기화 |
+| 방향 $\theta$ | [rad], 반시계 방향이 양수, 범위 $[-\pi, \pi]$. 각도 차이는 `atan2(sin, cos)`로 정리 |
+| 로봇 좌표 | $+x$ 정면, $+y$ 왼쪽 |
+| 격자 지도 | `grid[row][col]`, row ↔ y, col ↔ x, 해상도 0.05 m, 시작점 중심 32 m 정사각형(640 × 640칸) |
+| 격자 값 | 내부는 log-odds. 외부 공개값은 −1 모름, 0 빈칸, 1 장애물 |
+| 속도 명령 | $(v, \omega)$ [m/s, rad/s] |
+| 시간 | `robot.getTime()` 시뮬레이션 시간. 모든 타임아웃에 적용 |
 
 **바퀴 속도 변환**
 
@@ -226,31 +236,91 @@ $$
 
 ## 7. 모듈 구성
 
-### 7.1 CONTEXT.md 모듈 목록
+### 7.1 파일 구조와 담당
 
-| 모듈 | 역할 | 담당 |
-|---|---|---|
-| `sar_main.py` | 진입점. `RobotIO` 생성, Mission 루프 | 통합 |
-| `config.py` | 모든 설정값 | 통합 |
-| `robot_io.py` | Webots 장치 래핑. Webots API 호출은 이 파일에서만 허용 | 통합 |
-| `mission.py` | 상태 머신 | 통합 |
-| `grid_map.py` | 점유 격자, 라이다 갱신, 팽창, 프론티어 | 계획 |
-| `planner.py` | A\*, 프론티어 목표 선택 | 계획 |
-| `perception.py` | YOLO11n 검출과 색 판별, 거리·방위 추정, 연속 확인 | 인지 |
-| `viz.py` | 지도·경로·대상 위치 그림 저장 | 인지 |
-| `odometry.py` | 엔코더 오도메트리, 방향 칼만 필터, (선택) 스캔-지도 매칭 | 행동 |
-| `local_control.py` | pure pursuit, 라이다 안전 필터 | 행동 |
-| `hsv_tuner/hsv_tuner.py` | 키보드 조종, HSV 트랙바, 프레임 저장 | 인지 |
+```text
+controllers/sar_main/
+  sar_main.py            진입점: RobotIO 생성, Mission 루프
+  sar/config.py          모든 설정값
+  sar/robot_io.py        Webots 장치 래핑. Webots API는 이 파일에서만 호출
+  sar/mission.py         상태 머신
+  sar/grid_map.py        점유 격자, 라이다 갱신, 팽창, 프론티어
+  sar/planner.py         A*, 프론티어 목표 선택
+  sar/perception.py      YOLO11n 검출과 색 판별, 거리·방위 추정, 연속 확인
+  sar/odometry.py        엔코더 오도메트리, 방향 칼만 필터, (선택) 스캔-지도 매칭
+  sar/local_control.py   pure pursuit, 라이다 안전 필터
+  sar/viz.py             지도·경로·대상 위치 그림 저장
+controllers/hsv_tuner/
+  hsv_tuner.py           키보드 조종, HSV 트랙바, 프레임 저장
+```
 
-파일 1개는 담당자 1명만 수정합니다. main 머지는 통합 담당만 수행합니다.
+파일별 담당은 4장에 있습니다. 모든 팀 모듈이 `controllers/sar_main/` 안에 있으므로 컨트롤러 폴더 단위로 제출할 수 있습니다. YOLO 가중치는 저장소 루트의 `models/YOLO/`에 있으므로 제출 형태에 맞춰 `YOLO_MODEL` 경로를 확인하십시오. 파일 1개는 담당자 1명만 수정합니다. main 머지는 통합 담당만 수행합니다.
 
-### 7.2 sar-robot 현재 코드와 차이
+### 7.2 모듈 인터페이스
 
-CONTEXT.md의 파일 구조와 함수 이름은 sar-robot `main`의 코드·문서와 다릅니다. 인터페이스의 원본은 sar-robot [모듈 인터페이스](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/interfaces.md)입니다. 통합 담당이 기준을 정하고 해당 문서를 갱신하십시오.
+모듈 사이 호출은 다음 함수로 제한합니다. 인터페이스를 바꾸려면 사용하는 모듈 담당자와 먼저 합의하고 이 절과 `CONTEXT.md`를 같은 PR에서 갱신하십시오.
 
-| 항목 | CONTEXT.md | sar-robot `main` |
+```python
+# robot_io.py
+class RobotIO:
+    def step(self) -> bool                         # robot.step(ts) != -1
+    def time(self) -> float
+    def encoders(self) -> tuple[float, float]      # (좌, 우) 누적 rad
+    def compass(self) -> tuple | None              # 장치 없으면 None
+    def lidar(self) -> list[float] | None          # 360개, 인덱스 규칙은 5.4절
+    def camera_bgr(self) -> "np.ndarray | None"    # (480, 640, 3) uint8
+    def drive(self, v: float, w: float) -> None    # 바퀴 속도 변환·제한 포함
+
+# odometry.py
+class Odometry:
+    def __init__(self, x: float, y: float, theta: float)
+    def update(self, enc_l: float, enc_r: float, compass=None) -> None
+    # 방향 칼만 필터: 예측(엔코더 dθ, P += Q) → 갱신(나침반 z, K = P/(P+R))
+    def pose(self) -> tuple[float, float, float]
+    def heading_var(self) -> float                 # 방향 분산 P (디버깅·발표용)
+    def correct(self, dx: float, dy: float, dth: float) -> None   # (선택) 스캔 매칭 보정값 적용
+
+# grid_map.py
+class GridMap:
+    def update(self, pose, ranges) -> None
+    def to_cell(self, x, y) -> tuple[int, int]     # (row, col)
+    def to_world(self, row, col) -> tuple[float, float]
+    def layers(self) -> tuple                      # (occ, blocked, soft, unknown) bool 배열
+    def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...]
+
+# planner.py
+def plan(grid, start_xy, goal_xy, allow_unknown=False) -> list[tuple] | None   # [(x, y), ...]
+def choose_frontier(grid, pose, blacklist) -> tuple | None                     # (x, y)
+
+# local_control.py
+def pure_pursuit(pose, path, lookahead) -> tuple[float, float, bool]   # (v, w, reached)
+def safety_filter(v, w, ranges) -> tuple[float, float, bool]           # (v, w, blocked)
+
+# perception.py
+class TargetDetector:
+    def __init__(self, color: str, model_path: str)   # YOLO 모델은 생성 시 1회만 로드
+    def detect(self, bgr) -> dict | None
+    # 반환: {"cx", "cy", "w", "h", "conf", "cls", "color", "dist", "bearing", "source"}
+    #   source: "yolo" 또는 "color" (YOLO가 놓쳐 색 분할로 찾은 경우)
+    def to_world(self, det, pose) -> tuple[float, float]
+class Confirm:
+    def update(self, seen: bool, xy, dist: float = None) -> tuple[bool, tuple | None]   # (확정 여부, 위치 추정)
+    # 위치 추정 = 거리 가중 평균 (6장)
+
+# mission.py
+class Mission:
+    def tick(self) -> None
+    # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식 → 상태 머신 → 안전 필터 → drive
+```
+
+### 7.3 sar-robot 수정 필요 항목
+
+2026-09-30 기준 sar-robot `main`의 코드와 문서는 다음 항목에서 이 문서와 다릅니다. 통합 담당은 sar-robot 코드와 문서(`interfaces.md`, `architecture.md`, `code-conventions.md`, `dev-setup.md`)를 이 문서 기준으로 수정하십시오.
+
+| 항목 | 기준 (CONTEXT.md) | sar-robot `main` 현재 |
 |---|---|---|
 | 코드 위치 | `controllers/sar_main/sar/` | `controllers/sar_mission/` + `src/sar/` 패키지 |
+| 컨트롤러 이름 | `sar_main` | `sar_mission` |
 | 라이다 조회 | `RobotIO.lidar()` | `RobotIO.lidar_ranges()` |
 | 엔코더 조회 | `RobotIO.encoders()` | `RobotIO.wheel_angles()` |
 | 구동 명령 | `RobotIO.drive(v, w)` | `RobotIO.set_wheel_speeds(v_left, v_right)` |
@@ -258,10 +328,7 @@ CONTEXT.md의 파일 구조와 함수 이름은 sar-robot `main`의 코드·문�
 | 경로 계획 | `plan(grid, start_xy, goal_xy)` → `[(x, y)]` | `astar(grid, start_rc, goal_rc)` → `[(row, col)]` (예정) |
 | 인식 | `TargetDetector.detect(bgr)` → `cx`, `dist`, `bearing` 등 | `detect(frame_bgr)` → `err`, `area` (예정) |
 | 방향 범위 | $[-\pi, \pi]$ | $[-\pi, \pi)$ |
-| Python 버전 | 3.10 | 3.12 (`code-conventions.md`). 3.10 전환 작업 중 |
-| `viz.py` 담당 | 인지 | 계획 (`roles.md`의 지도 시각화 산출물) |
-
-제출물이 컨트롤러 폴더만 허용하면 `src/sar/` 구조는 그대로 제출할 수 없습니다. 제출 형태를 확인한 뒤 코드 위치를 확정하십시오.
+| Python 버전 | 3.10 | 3.12 (`code-conventions.md`). `chore/intro-environment` 브랜치에서 3.10 전환 작업 중 |
 
 ## 8. 상태 머신
 
@@ -406,15 +473,17 @@ OpenCV 기준 범위(H 0~179, S·V 0~255)입니다. YOLO 상자 안 색 판별�
 
 ## 13. 코딩 규칙
 
-공통 규칙의 원본은 sar-robot [코드 작성 규칙](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/code-conventions.md)입니다. 이 과제에서 추가로 지킬 규칙은 다음과 같습니다.
-
+- Python 3.10을 사용함. 외부 패키지는 numpy·opencv·ultralytics만 사용하며 scipy 없이 동작해야 함
 - YOLO 모델은 컨트롤러 시작 시 1회만 로드함. 추론은 `model.predict(..., verbose=False)`로 로그 출력 억제
-- scipy 없이 동작하도록 numpy·opencv·ultralytics만 사용함
+- Webots API는 `robot_io.py`에서만 호출함
+- 숫자 상수는 `config.py`에만 정의함
 - A\*·프론티어 선택 같은 무거운 계산은 목표 변경, 경로 차단, 2초 주기에만 실행함
-- 모든 모듈에 Webots 없이 실행되는 단독 테스트를 포함함
+- 모든 모듈에 Webots 없이 실행되는 `if __name__ == "__main__":` 단독 테스트를 포함함
 - 센서 값이나 경로가 `None`일 때의 동작을 정의함. 예외로 종료하지 않음
 - 모든 `while` 루프에 반복 상한이나 시간 제한을 둠
 - 상태 전환 로그 형식은 `[t=12.3s] EXPLORE -> APPROACH (red at -5.34,-10.54)`로 통일함
+
+이름 규칙과 코드 형식(ruff)은 sar-robot [코드 작성 규칙](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/code-conventions.md)을 따릅니다. 폴더 구조와 Python 버전은 이 문서가 기준입니다.
 
 ## 14. 대회 시작 후 확인 항목
 
