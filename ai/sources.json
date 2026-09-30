@@ -7,6 +7,13 @@
       "path": "human/how-to/write-docs.md",
       "purpose": "문서 작성·검증",
       "kind": "policy"
+    },
+    {
+      "id": "sar-mission-spec",
+      "repository": "docs",
+      "path": "human/reference/sar-과제-구현-기준.md",
+      "purpose": "해커톤 과제·평가 기준·제출물 요건·구현 기준",
+      "kind": "reference"
     }
   ]
 }
