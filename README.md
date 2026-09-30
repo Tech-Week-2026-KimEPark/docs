@@ -8,7 +8,7 @@
 | 대회 과제·평가 기준·제출물 | [SAR 해커톤 과제와 구현 기준](human/reference/sar-과제-구현-기준.md) |
 | 팀 역할·Git·협업 규칙 | [팀 규칙](human/reference/team/README.md) |
 | AI에게 줄 작업 규칙 | 해당 저장소의 `AGENTS.md`와 [AI용 문서](ai/README.md) |
-| AI 대화에 첨부할 팀 규칙 원문 | [CONTEXT.md](CONTEXT.md). 대회 공지로 바뀐 값은 [과제와 구현 기준](human/reference/sar-과제-구현-기준.md) 1.3절 |
+| AI 대화에 첨부할 팀 규칙 | [CONTEXT.md](CONTEXT.md). 사람용 원본은 [과제와 구현 기준](human/reference/sar-과제-구현-기준.md) |
 | 새 문서를 쓸 때 | [문서 작성 안내](human/how-to/write-docs.md) |
 | 같은 내용의 문서가 여러 개일 때 | [원본 문서 위치](human/reference/document-locations.md) |
 
