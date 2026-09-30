@@ -99,6 +99,12 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/사람-회피-설계.md",
+      "title": "이동하는 사람 회피 설계",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/탐색-개선-설계.md",
       "title": "탐색 개선 설계",
       "audience": "human",
