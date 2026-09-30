@@ -12,7 +12,7 @@
 | 팀 역할·Git·협업 규칙 | `human/reference/team/` | A |
 | 대회 과제·평가 기준·제출물 요건 | `human/reference/sar-과제-구현-기준.md` | A |
 | 파일 구조, 모듈 인터페이스, Python 버전 (`CONTEXT.md` 기준) | `human/reference/sar-과제-구현-기준.md` 7장 | A, 인터페이스 제공 모듈 담당자 |
-| AI 대화 첨부용 팀 규칙 원문 | `CONTEXT.md` | A |
+| AI 대화 첨부용 팀 규칙 (과제 문서와 동기화) | `CONTEXT.md` | A |
 | intro 문서(강의 자료) | `PNU-TECHWEEK-260930/docs/human/`, `kth` 브랜치 | intro |
 | sar-robot 개발 문서 | `sar-robot/docs/human/`. 구조·인터페이스 설명은 위 기준에 맞춰 갱신 | 변경한 모듈 담당자 |
 | 코드 이름·형식 규칙 | `sar-robot/docs/human/reference/code-conventions.md` | A |
