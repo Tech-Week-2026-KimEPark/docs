@@ -81,6 +81,12 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/features/sar_eval.md",
+      "title": "sar_eval 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/features/viz.md",
       "title": "viz 기능 설명",
       "audience": "human",
@@ -89,6 +95,18 @@
     {
       "path": "human/explanation/sar-robot-병합-분석.md",
       "title": "sar-robot 병합 내용 분석",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/sar-시스템-설계.md",
+      "title": "SAR 로봇 시스템 설계서",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/sar-창의성-확장성-설계.md",
+      "title": "SAR 창의성·확장성 설계",
       "audience": "human",
       "type": "explanation"
     },
