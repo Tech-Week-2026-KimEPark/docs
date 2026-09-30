@@ -4,5 +4,6 @@
 
 ## 목록
 
+- [팀 규칙](team/README.md)
 - [자율 탐색·구조 해커톤 전체 묶음 요약본](sar-전체-묶음.md)
 - [원본 문서 위치](document-locations.md)
