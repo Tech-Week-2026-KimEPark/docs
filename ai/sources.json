@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "id": "docs-process",
+      "repository": "docs",
+      "path": "human/how-to/write-docs.md",
+      "purpose": "문서 작성·검증",
+      "kind": "policy"
+    }
+  ]
+}

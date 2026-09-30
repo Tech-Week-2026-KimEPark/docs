@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "layout": "hub",
+  "home": "docs",
+  "project": { "name": "부산대 TECH WEEK 2026", "language": "ko" },
+  "repositories": {
+    "docs": { "local": "docs", "url": "https://github.com/Tech-Week-2026-KimEPark/docs", "branch": "main" },
+    "intro": { "local": "PNU-TECHWEEK-260930", "url": "https://github.com/Tech-Week-2026-KimEPark/Intro", "branch": "main" }
+  }
+}
