@@ -45,6 +45,12 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/sar-robot-병합-분석.md",
+      "title": "sar-robot 병합 내용 분석",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/troubleshooting/README.md",
       "title": "장애 조사 기록",
       "audience": "human",
