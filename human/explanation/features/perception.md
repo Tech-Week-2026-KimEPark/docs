@@ -131,6 +131,6 @@ YOLO 로드나 추론이 실패해도 예외로 종료하지 않습니다. 실�
 
 ## 관련 자료
 
-- 구현 PR: sar-robot [#6](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/6), YOLO 원본 결과 보관은 sar-robot [#10](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/10), 색 분할 보완·클래스 무관 NMS는 sar-robot `feat/tuner-hold-to-drive` 브랜치
+- 구현 PR: sar-robot [#6](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/6), YOLO 원본 결과 보관은 sar-robot [#10](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/10), 색 분할 보완·클래스 무관 NMS·방해 물체 오검출 수정은 sar-robot [#17](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/17)
 - 원본 인터페이스: [과제와 구현 기준](../../reference/sar-과제-구현-기준.md) 6장 계산식, 7.2절 인터페이스, 9장 설계 결정
 - 관련 기능 문서: [viz](viz.md), [hsv_tuner](hsv_tuner.md)

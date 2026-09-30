@@ -179,6 +179,6 @@ H 하한이 상한보다 크면 0을 넘는 범위로 보고 두 범위 (0~상�
 
 ## 관련 자료
 
-- 구현 PR: sar-robot [#6](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/6), 측정 기록과 자동 주행은 sar-robot [#10](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/10)
+- 구현 PR: sar-robot [#6](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/6), 측정 기록과 자동 주행은 sar-robot [#10](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/10), 누르는 동안 이동·분석 스크립트·자동 탐색은 sar-robot [#17](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/17)
 - 사용 절차: sar-robot [HSV 임계값 튜닝과 인식 성능 측정](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/how-to/hsv-tuning.md)
 - 관련 기능 문서: [perception](perception.md)
