@@ -63,20 +63,20 @@ $$
 
 YOLO 로드나 추론이 실패해도 예외로 종료하지 않습니다. 실패 사유를 `load_error` 또는 `last_error`에 기록하고 색 분할로 계속 동작합니다.
 
-### 이동하는 사람 추적
+### 움직이는 물체 추적
 
-`PersonTracker`는 라이다로 움직이는 사람(다리)을 추적합니다. 설계는 사람 회피 설계(docs [#21](https://github.com/Tech-Week-2026-KimEPark/docs/pull/21)) 3.1~3.2절이며, 미션 연결은 설계 합의 후 통합 담당이 진행합니다.
+`MovingObstacleTracker`는 라이다로 움직이는 물체를 추적합니다. 라이다는 물체 종류를 구분하지 못하므로 사람, 공 등을 구분하지 않습니다. 이전 이름 `PersonTracker`는 별칭으로 남아 있습니다. 설계는 움직이는 물체 회피 설계(docs [#21](https://github.com/Tech-Week-2026-KimEPark/docs/pull/21)) 3.1~3.2절입니다. 출력은 `local_control.yield_command()`(sar-robot #19)에 그대로 넘길 수 있으며, 미션 연결은 통합 담당이 진행합니다.
 
 | 단계 | 처리 | 설정값 |
 |---|---|---|
 | 동적 점 | 라이다 끝점 중 지도상 확인된 빈칸(log-odds < 0)이면서 장애물 칸에서 일정 거리 이상 떨어진 점 | `DYN_WALL_GAP` 0.15 m |
-| 덩어리 | 인접 빔 점 사이 거리가 기준 미만이면 같은 덩어리. 폭 조건을 만족하는 덩어리 중심을 후보로 사용 | `DYN_CLUSTER_GAP` 0.10 m, `PERSON_MIN_WIDTH`·`PERSON_MAX_WIDTH` 0.05·0.60 m |
-| 다리 병합 | 중심 거리가 기준 이내인 후보를 한 사람으로 합침 | `LEG_PAIR_DIST` 0.40 m |
+| 덩어리 | 인접 빔 점 사이 거리가 기준 미만이면 같은 덩어리. 폭 조건을 만족하는 덩어리 중심을 후보로 사용 | `DYN_CLUSTER_GAP` 0.10 m, `DYN_MIN_WIDTH`·`DYN_MAX_WIDTH` 0.05·1.0 m |
+| 병합 | 중심 거리가 기준 이내인 후보(사람 다리 2개 등)를 한 물체로 합침 | `DYN_MERGE_DIST` 0.40 m |
 | 연결 | 예측 위치와 가장 가까운 후보를 기준 거리 이내에서 연결 | `TRACK_GATE` 0.50 m |
 | 추정 | 알파-베타 필터로 위치·속도 갱신 | `TRACK_ALPHA`·`TRACK_BETA` 0.5·0.1 |
 | 확정·삭제 | 연속 연결 횟수 이상이면 확정, 일정 시간 미관측이면 삭제 | `TRACK_CONFIRM` 3회, `TRACK_TIMEOUT` 1.0 s |
 
-`update(t, pose, ranges, grid)`는 `grid.update()` 호출 전에 실행해야 합니다. 갱신 후에는 사람이 찍힌 칸이 장애물로 바뀌어 동적 점이 사라집니다. 반환 항목은 `{"id", "x", "y", "vx", "vy", "age", "moving"}`이며 `moving`은 속도가 `MOVING_SPEED`(0.05 m/s) 이상인지 여부입니다.
+`update(t, pose, ranges, grid)`는 `grid.update()` 호출 전에 실행해야 합니다. 갱신 후에는 물체가 찍힌 칸이 장애물로 바뀌어 동적 점이 사라집니다. 반환 항목은 `{"id", "x", "y", "vx", "vy", "age", "moving"}`입니다. 기본으로 속도가 `MOVING_SPEED`(0.05 m/s) 이상인 대상만 반환하며, `moving_only=False`면 정지한 대상도 반환합니다.
 
 ## 인터페이스와 설정값
 
@@ -133,13 +133,13 @@ YOLO 로드나 추론이 실패해도 예외로 종료하지 않습니다. 실�
 | 빨간 방해 물체 | 저장 프레임 76장에 수정한 `find_color_blobs()` 적용 | 소화기(화면 끝, 이전 코드 오검출)와 진입 금지 표지판 검출 없음. 빨간 사과 9장면은 모두 검출 유지 |
 | 작은 사과 | 합성 빨간 원 반지름 5~60 px | 반지름 5 px(약 5.3 m)부터 검출. 4 px는 `MIN_BLOB_AREA` 미만 |
 
-사람 추적은 2026-09-30 sar-robot `feat/person-tracker` 브랜치에서 확인했습니다.
+움직이는 물체 추적은 2026-09-30 sar-robot `feat/person-tracker` 브랜치에서 확인했습니다.
 
 | 항목 | 명령·조건 | 결과 |
 |---|---|---|
-| 단위 테스트 | `python -m pytest -q tests/test_person_tracker.py` | 2개 통과 |
-| 보행자 추적 | 확인된 빈칸 지도, 로봇 정지, 다리 원 2개(반지름 0.06 m, 간격 0.2 m)가 2 m 앞에서 +y로 0.2 m/s 이동, 3초 | 1명 확정, 위치 오차 0.1 m 이내, 속도 (0, 0.2) ± 0.05 m/s |
-| 벽 제외 | 장애물 칸에 맞은 라이다 점 | 동적 점 없음, 추적 대상 없음 |
+| 단위 테스트 | `python -m pytest -q tests/test_moving_obstacle_tracker.py` | 2개 통과 |
+| 보행자 추적 | 확인된 빈칸 지도, 로봇 정지, 다리 원 2개(반지름 0.06 m, 간격 0.2 m)가 2 m 앞에서 +y로 0.2 m/s 이동, 3초 | 1개 확정, 위치 오차 0.1 m 이내, 속도 (0, 0.2) ± 0.05 m/s |
+| 정지 대상 제외 | 지도의 벽, 지도에 없는 정지 물체 | 벽: 동적 점 없음. 정지 물체: 추적은 되지만 기본 반환에서 제외 |
 | Webots 보행자 | apartment.wbt 보행자 | 미확인 |
 
 ## 한계와 확인 필요 항목
