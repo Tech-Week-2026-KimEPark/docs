@@ -9,13 +9,17 @@
 | AI 작업 규칙 | 각 저장소의 `AGENTS.md` | 해당 저장소 |
 | AI가 참고할 문서 목록 | `ai/sources.json` | 해당 작업 |
 | 과거 보고서·초안 | `human/archive/` | 작성한 담당자 |
-| intro 문서 | `PNU-TECHWEEK-260930/docs/human/` | intro |
+| 팀 역할·Git·협업 규칙 | `human/reference/team/` | A |
+| intro 문서(강의 자료) | `PNU-TECHWEEK-260930/docs/human/`, `kth` 브랜치 | intro |
+| sar-robot 개발 문서 | `sar-robot/docs/human/` | 변경한 모듈 담당자 |
+| 코드 작성 규칙, 모듈 인터페이스 | `sar-robot/docs/human/reference/` | A, 인터페이스 제공 모듈 담당자 |
 
 프로젝트에 맞게 행을 추가하십시오. 구체적인 담당자는 팀에서 배정합니다.
 
 ## 저장소별 문서
 
-- [intro 문서](https://github.com/Tech-Week-2026-KimEPark/Intro/blob/main/docs/human/README.md)
+- [intro 문서](https://github.com/Tech-Week-2026-KimEPark/Intro/blob/kth/docs/human/README.md)
+- [sar-robot 문서](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/README.md)
 
 ## 위치 고정 파일
 
