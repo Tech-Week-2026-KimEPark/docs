@@ -63,6 +63,12 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/features/mission.md",
+      "title": "mission 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/features/perception.md",
       "title": "perception 기능 설명",
       "audience": "human",

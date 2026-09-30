@@ -125,7 +125,7 @@ controllers/sar_main/
   sar_main.py            (통합) 진입점: RobotIO 생성, Mission 루프          [기동·로그만]
   sar/config.py          (통합) 모든 설정값                                  [구현]
   sar/robot_io.py        (통합) Webots 장치 래핑. Webots API는 이 파일에서만 호출 [구현]
-  sar/mission.py         (통합) 상태 머신                                    [미구현]
+  sar/mission.py         (통합) 상태 머신                                    [구현]
   sar/grid_map.py        (계획) 점유 격자, 라이다 갱신, 팽창, 프론티어        [구현]
   sar/planner.py         (계획) A*, 다익스트라 프론티어 선택·복귀 거리 지도    [구현]
   sar/perception.py      (인지) YOLO11n 검출 + 색 판별, 거리·방위 추정, 연속 확인 [구현]
@@ -225,10 +225,13 @@ def render_map(grid, to_cell, trajectory=(), path=(), rescued=(), start=None, po
 # grid는 공개값(-1/0/1), rescued는 (x, y, t) 목록
 def save_map(path, image) -> bool
 
-# mission.py  [미구현]
+# mission.py
+def fit_compass(samples) -> tuple[int, float, float] | None   # (sign, offset, scale). 시작 회전 표본으로 나침반 보정
+def compass_heading(vec, sign, offset) -> float                # 보정된 방향 [rad]
 class Mission:
+    def __init__(self, io, odom, grid, detector, log=None)     # log: 로그 함수. sar_main이 print 전달
     def tick(self) -> None
-    # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식 → 상태 머신 → 안전 필터 → drive
+    # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식(YOLO_EVERY step) → 상태 머신 → 안전 필터 → drive
 ```
 
 ---
@@ -356,6 +359,23 @@ PATH_STEP = 0.10              # m, 반환 경로 점 간격
 BLACKLIST_RADIUS = 0.5        # m, 블랙리스트 주변 프론티어 제외 반경
 FRONTIER_MIN_DIST = 0.3       # m, 이보다 가까운 프론티어 칸 제외
 
+# 미션 상태 머신
+INIT_SPIN_W = 0.8             # rad/s, 시작 제자리 회전 속도
+COMPASS_SCALE_TOL = 0.5       # 오도메트리/나침반 회전 비율이 1에서 이만큼 벗어나면 나침반 미사용
+REPLAN_PERIOD = 2.0           # s, 프론티어 선택·경로 재계획 주기
+FRONTIER_TIMEOUT = 30.0       # s, 같은 프론티어 목표 제한 시간
+APPROACH_TIMEOUT = 60.0       # s, 대상 접근 제한 시간
+RESCUE_HOLD = 2.0             # s, 구조 정지 시간
+RETURN_TOL = 0.12             # m, 시작점 도착 판정
+FACE_TOL = 0.1                # rad, 정면 정렬 허용 오차
+FACE_GAIN = 1.5               # 1/s, 정렬 각속도 이득
+CANDIDATE_DROP_DIST = 0.8     # m, 미확정 후보 삭제 거리
+STUCK_TIME, STUCK_DIST = 4.0, 0.05   # s, m. 정체 판정
+BLOCKED_TIME = 3.0            # s, 안전 필터 연속 차단 재계획
+RECOVERY_BACK_TIME = 1.0      # s, 후진 시간
+RECOVERY_TURN_TIME = 1.5      # s, 회전 시간
+TRAJ_STEP = 0.10              # m, 궤적 기록 간격
+
 # 위치 추정
 HEADING_Q = 0.01 ** 2         # 방향 예측 잡음 (한 스텝, rad^2)
 HEADING_R = 0.05 ** 2         # 나침반 관측 잡음 (rad^2)
@@ -434,24 +454,28 @@ YOLO 상자 안 색 판별과 색 분할 대체 검출에 공통으로 사용합
 10. `print`는 `sar_main.py`에서만 사용. `sar/` 모듈은 값을 반환 (단독 테스트 출력은 예외)
 11. PR 전 저장소 루트에서 `ruff format .`, `ruff check .`, `pytest -q` 통과
 12. 브랜치 `<type>/<내용>`, 커밋 제목 `type(scope): 명사형 요약`. 브랜치·커밋에 AI 도구 이름과 서명 금지
-13. 기능 1개를 구현하면 같은 작업에서 docs 저장소 `human/explanation/features/<모듈 이름>.md`에 기능 문서 작성
+13. 기능 1개를 구현하면 같은 작업에서 docs 저장소 `human/explanation/features/<모듈 이름>.md`에 기능 문서 작성. docs PR을 코드 PR보다 먼저 병합
+14. Webots 동작 검증은 `worlds/sar_apartment.wbt`(apartment.wbt에 `sar_main` 컨트롤러 지정)로만 수행. `sar_dev.wbt` 결과는 검증으로 인정하지 않음
+15. 헤드리스로 실행한 Webots는 직접 실행한 프로세스만 PID로 종료. `pkill -f webots` 금지
 
 ---
 
-## 12. 알려진 문제 (2026-09-30 분석)
+## 12. 알려진 문제 (2026-09-30 갱신)
 
-| 번호 | 위치 | 문제 | 조치 |
+| 번호 | 위치 | 문제 | 상태·조치 |
 |---|---|---|---|
-| 1 | `local_control._lookahead_point` | 경로 첫 점부터 검색해 로봇 뒤의 점을 목표로 선택. 재계획 사이 제자리 회전 반복 | 로봇과 가장 가까운 경로점 이후부터 검색 |
-| 2 | `sar_main.py`, `mission` | 나침반 값을 `Odometry.update()`에 전달하지 않음 | INIT_SPIN 보정 후 방향 [rad] 전달 |
-| 3 | `local_control.safety_filter` | 정면 ±25°의 좌우 반폭이 0.20 m에서 0.093 m로 로봇 반지름 0.105 m보다 좁음 | 검사 반각 39.5° 이상 또는 빔별 좌우 거리 검사 |
-| 4 | `local_control.safety_filter` | 후진(`v ≤ 0`) 미검사 | 후진 시 후방(인덱스 0 주변) 검사 |
-| 5 | `local_control.safety_filter` | 라이다 0.12 m 미만 반환값 미확인 | Webots에서 근접 반환값 확인 |
-| 6 | `config.TARGET_DIAMETER` | 0.095 m. RedApple 충돌 구 지름은 0.10 m | 메시 지름 또는 1 m 상자 폭 실측 후 보정 |
-| 7 | `perception.detect_all` | YOLO 대상이 있으면 색 분할 미실행. 두 번째 사과 누락 가능 | YOLO 상자와 겹치지 않는 색 분할 결과 추가 |
-| 8 | `local_control` | `_PIVOT_ANGLE`(55°), `_FRONT_HALF_ANGLE`(25°) 모듈 상수 | `config.py`로 이동 |
+| 1 | `local_control._lookahead_point` | 지나온 경로점을 목표로 선택 | 해결 (sar-robot #11) |
+| 2 | `sar_main.py`, `mission` | 나침반 값 미전달 | 해결 (mission INIT_SPIN 보정) |
+| 3 | `local_control.safety_filter` | 정면 검사 범위가 로봇 폭보다 좁음 | 해결 (sar-robot #11) |
+| 4 | `local_control.safety_filter` | 후진 미검사 | 해결 (sar-robot #11) |
+| 5 | `local_control.safety_filter` | 라이다 0.12 m 미만 반환값 | 확인 완료: `inf` 반환, `STOP_DIST` 여유로 안전 (sar-robot #9) |
+| 6 | `config.TARGET_DIAMETER` | 0.095 m. RedApple 충돌 구 지름은 0.10 m | 메시 지름 또는 1 m 상자 폭 실측 후 보정 (인지) |
+| 7 | `perception.detect_all` | YOLO 대상이 있으면 색 분할 미실행 | YOLO 상자와 겹치지 않는 색 분할 결과 추가 (인지) |
+| 8 | `local_control` | `_PIVOT_ANGLE`(55°) 모듈 상수 | `config.py`로 이동 (행동) |
+| 9 | `perception` YOLO | apartment 월드 빨간 사과를 0.5 m 거리에서도 YOLO가 검출하지 못함. 확정 검출 3건 모두 `source=color` | 클래스·신뢰도·입력 크기 확인 (인지) |
+| 10 | `perception` 색 분할 | 소화기를 빨간 사과로 확정. 원형도 소화기 0.64~0.70, 사과 0.74~0.79로 `MIN_CIRCULARITY`(0.6)로 구분 불가 | 형태 조건 추가 또는 임계값 재측정 (인지). 해결 전에는 두 번째 사과 대신 오탐을 구조할 수 있음 |
 
-상세 근거는 docs 저장소 `human/explanation/sar-robot-병합-분석.md` 6장입니다.
+상세 근거는 docs 저장소 `human/explanation/sar-robot-병합-분석.md` 6장과 `human/explanation/features/mission.md`입니다.
 
 ---
 
