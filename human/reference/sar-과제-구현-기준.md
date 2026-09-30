@@ -289,14 +289,21 @@ class GridMap:
     def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...]
     def public(self) -> np.ndarray                 # 공개값 격자 (-1/0/1). viz.render_map() 입력
     def clearance(self) -> np.ndarray              # 가장 가까운 장애물까지 거리 [m]
+    def frontier_sizes(self) -> np.ndarray         # 칸별 프론티어 묶음 칸 수
+    def invalidate(self) -> None                   # logodds·seen을 직접 수정한 뒤 호출
+    version: int                                   # update()마다 증가
+    plan_version: int                              # 장애물·확인 분류가 바뀔 때만 증가
 
 # planner.py
 def plan(grid, start_xy, goal_xy, allow_unknown=False, field=None) -> list[tuple] | None   # [(x, y), ...]
 def choose_frontier(grid, pose, blacklist) -> tuple | None                     # (x, y)
-class DistanceField:                               # 기준점 다익스트라 거리 지도
+def choose_frontier_path(grid, pose, blacklist) -> tuple | None                # ((x, y), 경로)
+def path_length(path) -> float | None              # 실제 경로 길이 [m]
+class DistanceField:                               # 기준점 다익스트라 비용 지도
     def __init__(self, grid, origin_xy)
-    def distance(self, xy) -> float | None         # 기준점까지 경로 비용 [m]
-    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로
+    def distance(self, xy) -> float | None         # 기준점까지 가중 비용 [m]
+    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로. 지도가 바뀌었으면 None
+    def is_current(self) -> bool                   # 생성 이후 계획용 지도 상태 유지 여부
 
 # local_control.py
 def pure_pursuit(pose, path, lookahead) -> tuple[float, float, bool]   # (v, w, reached)
@@ -332,7 +339,7 @@ sar-robot 코드와 문서는 이 문서 기준으로 변경했습니다. 모듈
 | 방향 범위 | `atan2(sin, cos)`로 $[-\pi, \pi]$ 정리 | sar-robot #5 |
 | 설정값 | 10장 설정값 전체. `GRID_RESOLUTION` → `MAP_RES` | sar-robot #5 |
 
-`grid_map.py`와 `planner.py`의 동작과 검증 결과는 [grid_map 기능 설명](../explanation/features/grid_map.md)과 [planner 기능 설명](../explanation/features/planner.md)에 있습니다. `public()`, `clearance()`, `DistanceField`, `plan()`의 `field` 인자는 기존 형식을 유지한 추가 인터페이스입니다. `mission.py`는 아직 구현 전입니다. 담당자는 7.2절 형식으로 구현하십시오.
+`grid_map.py`와 `planner.py`의 동작과 검증 결과는 [grid_map 기능 설명](../explanation/features/grid_map.md)과 [planner 기능 설명](../explanation/features/planner.md)에 있습니다. `public()`, `clearance()`, `frontier_sizes()`, `invalidate()`, `version`, `plan_version`, `choose_frontier_path()`, `path_length()`, `DistanceField`, `plan()`의 `field` 인자는 기존 형식을 유지한 추가 인터페이스입니다. 경로 안전 규칙, 반환값의 의미, 미션 연결 순서는 planner 기능 설명의 "미션 연결 안내"에 있습니다. `mission.py`는 아직 구현 전입니다. 담당자는 7.2절 형식으로 구현하십시오.
 
 ## 8. 상태 머신
 
