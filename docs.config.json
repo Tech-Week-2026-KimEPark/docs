@@ -17,6 +17,11 @@
       "local": "PNU-TECHWEEK-260930",
       "url": "https://github.com/Tech-Week-2026-KimEPark/Intro",
       "branch": "kth"
+    },
+    "sar-robot": {
+      "local": "sar-robot",
+      "url": "https://github.com/Tech-Week-2026-KimEPark/sar-robot",
+      "branch": "main"
     }
   },
   "site": {
