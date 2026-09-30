@@ -323,7 +323,7 @@ v, w, blocked = local_control.safety_filter(v, w, ranges)
 
 ## 관련 자료
 
-- 구현 PR: sar-robot [#12](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/12) (최초 구현). 이 문서의 안전성·성능 보완 PR은 작성 후 추가
+- 구현 PR: sar-robot [#12](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/12) (최초 구현). 안전성·성능 보완은 sar-robot [#15](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/15)
 - 원본 인터페이스: [과제와 구현 기준](../../reference/sar-과제-구현-기준.md) 7.2절, 8장
 - 지도: [grid_map 기능 설명](grid_map.md)
 - 경로 다듬기 근거: [시간 최소 경로 가이드](../../how-to/sar-시간최소경로-가이드.md)
