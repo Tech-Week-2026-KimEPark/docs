@@ -10,9 +10,11 @@
 | AI가 참고할 문서 목록 | `ai/sources.json` | 해당 작업 |
 | 과거 보고서·초안 | `human/archive/` | 작성한 담당자 |
 | 팀 역할·Git·협업 규칙 | `human/reference/team/` | A |
+| 대회 과제·평가 기준·제출물 요건 | `human/reference/sar-과제-구현-기준.md` | A |
+| 파일 구조, 모듈 인터페이스, Python 버전 (`CONTEXT.md` 기준) | `human/reference/sar-과제-구현-기준.md` 7장 | A, 인터페이스 제공 모듈 담당자 |
 | intro 문서(강의 자료) | `PNU-TECHWEEK-260930/docs/human/`, `kth` 브랜치 | intro |
-| sar-robot 개발 문서 | `sar-robot/docs/human/` | 변경한 모듈 담당자 |
-| 코드 작성 규칙, 모듈 인터페이스 | `sar-robot/docs/human/reference/` | A, 인터페이스 제공 모듈 담당자 |
+| sar-robot 개발 문서 | `sar-robot/docs/human/`. 구조·인터페이스 설명은 위 기준에 맞춰 갱신 | 변경한 모듈 담당자 |
+| 코드 이름·형식 규칙 | `sar-robot/docs/human/reference/code-conventions.md` | A |
 
 프로젝트에 맞게 행을 추가하십시오. 구체적인 담당자는 팀에서 배정합니다.
 

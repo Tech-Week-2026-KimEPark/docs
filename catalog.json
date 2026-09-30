@@ -87,6 +87,12 @@
       "type": "reference"
     },
     {
+      "path": "human/reference/sar-과제-구현-기준.md",
+      "title": "SAR 해커톤 과제와 구현 기준",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
       "path": "human/reference/sar-전체-묶음.md",
       "title": "자율 탐색·구조 해커톤 전체 묶음 요약본",
       "audience": "human",

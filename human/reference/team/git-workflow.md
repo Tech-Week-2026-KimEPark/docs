@@ -36,16 +36,18 @@ git switch -c feat/frontier-explorer
 
 | scope | 대상 |
 |---|---|
-| `mission` | `src/sar/mission/` |
-| `io` | `src/sar/robot_io.py`, `controllers/` |
-| `config` | `src/sar/config.py` |
-| `mapping` | `src/sar/mapping/` |
-| `planning` | `src/sar/planning/` |
-| `perception` | `src/sar/perception/`, `models/` |
-| `control` | `src/sar/control/` |
-| `localization` | `src/sar/localization/` |
-| `geometry` | `src/sar/geometry.py` |
+| `mission` | `sar/mission.py` |
+| `io` | `sar/robot_io.py`, `sar_main.py` |
+| `config` | `sar/config.py` |
+| `mapping` | `sar/grid_map.py` |
+| `planning` | `sar/planner.py` |
+| `perception` | `sar/perception.py`, `controllers/hsv_tuner/`, `models/` |
+| `control` | `sar/local_control.py` |
+| `localization` | `sar/odometry.py` |
+| `viz` | `sar/viz.py` |
 | `world` | `worlds/`, `protos/` |
+
+`sar_main.py`와 `sar/`로 시작하는 경로는 `controllers/sar_main/` 기준입니다. 파일 구조의 원본은 [과제와 구현 기준](../sar-과제-구현-기준.md) 7.1절입니다.
 
 본문이 필요하면 빈 줄 뒤에 변경 이유를 개조식으로 작성하십시오.
 
@@ -102,6 +104,6 @@ git push origin v1
 
 ```bash
 git switch -c fix/rollback-to-v1
-git checkout v1 -- src/ controllers/
+git checkout v1 -- controllers/
 git commit -m "fix(mission): v1 태그 코드로 되돌림"
 ```

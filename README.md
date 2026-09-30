@@ -5,6 +5,7 @@
 | 필요한 문서 | 읽을 곳 |
 |---|---|
 | 개발·운영 중 찾아볼 내용 | [사람용 문서](human/README.md) |
+| 대회 과제·평가 기준·제출물 | [SAR 해커톤 과제와 구현 기준](human/reference/sar-과제-구현-기준.md) |
 | 팀 역할·Git·협업 규칙 | [팀 규칙](human/reference/team/README.md) |
 | AI에게 줄 작업 규칙 | 해당 저장소의 `AGENTS.md`와 [AI용 문서](ai/README.md) |
 | 새 문서를 쓸 때 | [문서 작성 안내](human/how-to/write-docs.md) |
