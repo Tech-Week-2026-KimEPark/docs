@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "repository": "docs",
+  "documents": [
+    {
+      "path": "AGENTS.md",
+      "title": "docs 작업 규칙",
+      "audience": "ai",
+      "type": "navigation"
+    },
+    {
+      "path": "CLAUDE.md",
+      "title": "CLAUDE",
+      "audience": "ai",
+      "type": "navigation"
+    },
+    {
+      "path": "README.md",
+      "title": "부산대 TECH WEEK 2026 문서",
+      "audience": "human",
+      "type": "navigation"
+    },
+    {
+      "path": "ai/README.md",
+      "title": "AI 작업 안내",
+      "audience": "ai",
+      "type": "navigation"
+    },
+    {
+      "path": "human/README.md",
+      "title": "사람이 읽는 문서",
+      "audience": "human",
+      "type": "navigation"
+    },
+    {
+      "path": "human/archive/README.md",
+      "title": "과거 자료",
+      "audience": "human",
+      "type": "archive"
+    },
+    {
+      "path": "human/explanation/README.md",
+      "title": "구조 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/troubleshooting/README.md",
+      "title": "장애 조사 기록",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/how-to/README.md",
+      "title": "작업 방법",
+      "audience": "human",
+      "type": "how-to"
+    },
+    {
+      "path": "human/how-to/sar-시간최소경로-가이드.md",
+      "title": "시간 최소 경로 가이드",
+      "audience": "human",
+      "type": "how-to"
+    },
+    {
+      "path": "human/how-to/sar-형식별-전략-플레이북.md",
+      "title": "대회 형식별 전략 플레이북",
+      "audience": "human",
+      "type": "how-to"
+    },
+    {
+      "path": "human/how-to/write-docs.md",
+      "title": "문서 작성 안내",
+      "audience": "human",
+      "type": "how-to"
+    },
+    {
+      "path": "human/reference/README.md",
+      "title": "규칙·값 참조",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/reference/document-locations.md",
+      "title": "원본 문서 위치",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/reference/sar-전체-묶음.md",
+      "title": "자율 탐색·구조 해커톤 전체 묶음 요약본",
+      "audience": "human",
+      "type": "reference"
+    },
+    {
+      "path": "human/tutorials/README.md",
+      "title": "시작하기",
+      "audience": "human",
+      "type": "tutorials"
+    },
+    {
+      "path": "human/tutorials/sar-총괄-안내서.md",
+      "title": "자율 탐색·구조 해커톤 총괄 안내서",
+      "audience": "human",
+      "type": "tutorials"
+    }
+  ]
+}

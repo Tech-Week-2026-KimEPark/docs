@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "path_base": "repository",
+  "moves": [
+    {
+      "repository": "docs",
+      "from": "SAR_00_총괄_안내서.md",
+      "to": "human/tutorials/sar-총괄-안내서.md"
+    },
+    {
+      "repository": "docs",
+      "from": "SAR_시간최소경로_가이드.md",
+      "to": "human/how-to/sar-시간최소경로-가이드.md"
+    },
+    {
+      "repository": "docs",
+      "from": "SAR_전체_묶음.md",
+      "to": "human/reference/sar-전체-묶음.md"
+    },
+    {
+      "repository": "docs",
+      "from": "SAR_형식별_전략_플레이북.md",
+      "to": "human/how-to/sar-형식별-전략-플레이북.md"
+    },
+    {
+      "repository": "docs",
+      "from": "img/c_timetable.png",
+      "to": "human/img/c_timetable.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/g_confirm.png",
+      "to": "human/img/g_confirm.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/g_profile.png",
+      "to": "human/img/g_profile.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/g_speed.png",
+      "to": "human/img/g_speed.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/g_three.png",
+      "to": "human/img/g_three.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/p_tree.png",
+      "to": "human/img/p_tree.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/p_zigzag.png",
+      "to": "human/img/p_zigzag.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/t_fsm.png",
+      "to": "human/img/t_fsm.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/t_loop.png",
+      "to": "human/img/t_loop.png"
+    },
+    {
+      "repository": "docs",
+      "from": "img/t_mission.png",
+      "to": "human/img/t_mission.png"
+    }
+  ],
+  "date": "2026-09-30"
+}
