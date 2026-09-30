@@ -313,22 +313,20 @@ class Mission:
     # 매 스텝 1회: 센서 → 오도메트리 → 지도 → 인식 → 상태 머신 → 안전 필터 → drive
 ```
 
-### 7.3 sar-robot 수정 필요 항목
+### 7.3 sar-robot 반영 상태
 
-2026-09-30 기준 sar-robot `main`의 코드와 문서는 다음 항목에서 이 문서와 다릅니다. 통합 담당은 sar-robot 코드와 문서(`interfaces.md`, `architecture.md`, `code-conventions.md`, `dev-setup.md`)를 이 문서 기준으로 수정하십시오.
+sar-robot 코드와 문서는 이 문서 기준으로 변경했습니다. 모듈별 구현 상태는 sar-robot [모듈 인터페이스](https://github.com/Tech-Week-2026-KimEPark/sar-robot/blob/main/docs/human/reference/interfaces.md)에 있습니다.
 
-| 항목 | 기준 (CONTEXT.md) | sar-robot `main` 현재 |
+| 항목 | 반영 내용 | 반영 PR |
 |---|---|---|
-| 코드 위치 | `controllers/sar_main/sar/` | `controllers/sar_mission/` + `src/sar/` 패키지 |
-| 컨트롤러 이름 | `sar_main` | `sar_mission` |
-| 라이다 조회 | `RobotIO.lidar()` | `RobotIO.lidar_ranges()` |
-| 엔코더 조회 | `RobotIO.encoders()` | `RobotIO.wheel_angles()` |
-| 구동 명령 | `RobotIO.drive(v, w)` | `RobotIO.set_wheel_speeds(v_left, v_right)` |
-| 오도메트리 | `Odometry(x, y, theta)`, 나침반 칼만 필터 | `WheelOdometry.update(left, right)` → `Pose` |
-| 경로 계획 | `plan(grid, start_xy, goal_xy)` → `[(x, y)]` | `astar(grid, start_rc, goal_rc)` → `[(row, col)]` (예정) |
-| 인식 | `TargetDetector.detect(bgr)` → `cx`, `dist`, `bearing` 등 | `detect(frame_bgr)` → `err`, `area` (예정) |
-| 방향 범위 | $[-\pi, \pi]$ | $[-\pi, \pi)$ |
-| Python 버전 | 3.10 | 3.12 (`code-conventions.md`). `chore/intro-environment` 브랜치에서 3.10 전환 작업 중 |
+| Python 버전 | 3.10 | sar-robot [#3](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/3) |
+| 코드 위치, 컨트롤러 이름 | `controllers/sar_main/sar/`, `sar_main`. `pip install -e .` 단계 제거 | sar-robot [#5](https://github.com/Tech-Week-2026-KimEPark/sar-robot/pull/5) |
+| `RobotIO` | `step`, `time`, `encoders`, `compass`, `lidar`, `camera_bgr`, `drive(v, w)` | sar-robot #5 |
+| 오도메트리 | `Odometry(x, y, theta)`, 방향 칼만 필터 | sar-robot #5 |
+| 방향 범위 | `atan2(sin, cos)`로 $[-\pi, \pi]$ 정리 | sar-robot #5 |
+| 설정값 | 10장 설정값 전체. `GRID_RESOLUTION` → `MAP_RES` | sar-robot #5 |
+
+`grid_map.py`, `planner.py`, `perception.py`, `local_control.py`, `mission.py`, `viz.py`는 아직 구현 전입니다. 각 담당자는 7.2절 형식으로 구현하십시오.
 
 ## 8. 상태 머신
 
