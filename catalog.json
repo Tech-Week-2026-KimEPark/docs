@@ -51,6 +51,18 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/features/grid_map.md",
+      "title": "grid_map 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/features/planner.md",
+      "title": "planner 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/sar-robot-병합-분석.md",
       "title": "sar-robot 병합 내용 분석",
       "audience": "human",

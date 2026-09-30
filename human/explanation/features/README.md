@@ -72,4 +72,9 @@ python3 scripts/check_docs.py --workspace
 
 ## 목록
 
-아직 작성한 기능 문서가 없습니다. 2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.
+| 문서 | 모듈 | 담당 |
+|---|---|---|
+| [grid_map 기능 설명](grid_map.md) | `sar/grid_map.py` | 계획 |
+| [planner 기능 설명](planner.md) | `sar/planner.py` | 계획 |
+
+2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.
