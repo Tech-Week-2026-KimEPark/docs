@@ -2,9 +2,27 @@
   "schema_version": 1,
   "layout": "hub",
   "home": "docs",
-  "project": { "name": "부산대 TECH WEEK 2026", "language": "ko" },
+  "project": {
+    "name": "부산대 TECH WEEK 2026",
+    "language": "ko"
+  },
   "repositories": {
-    "docs": { "local": "docs", "url": "https://github.com/Tech-Week-2026-KimEPark/docs", "branch": "main" },
-    "intro": { "local": "PNU-TECHWEEK-260930", "url": "https://github.com/Tech-Week-2026-KimEPark/Intro", "branch": "main" }
+    "docs": {
+      "local": "docs",
+      "url": "https://github.com/Tech-Week-2026-KimEPark/docs",
+      "branch": "main",
+      "mount": "guide"
+    },
+    "intro": {
+      "local": "PNU-TECHWEEK-260930",
+      "url": "https://github.com/Tech-Week-2026-KimEPark/Intro",
+      "branch": "kth"
+    }
+  },
+  "site": {
+    "title": "부산대 TECH WEEK 2026 문서",
+    "description": "자율 탐색·구조 해커톤 준비 문서와 저장소별 개발 문서",
+    "base": "/docs/",
+    "searchQuery": "경로"
   }
 }

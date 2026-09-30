@@ -21,3 +21,21 @@ docs/
 └── docs.config.json   저장소·사이트 설정
 PNU-TECHWEEK-260930/   AGENTS.md + docs/human + docs/ai
 ```
+
+## 위키 사이트
+
+사람용 문서는 [위키 사이트](https://tech-week-2026-kimepark.github.io/docs/)에 게시합니다. 게시 대상은 docs 저장소 `main`의 `human/`과 Intro 저장소 `kth`의 `docs/human/`입니다.
+
+| 조건 | 반영 시점 |
+|---|---|
+| docs 저장소 `main` push | 즉시 빌드·배포 |
+| Intro 저장소 `kth` 문서 변경 | 매시 17분 예약 빌드 |
+| 수동 실행 | Actions의 Documentation website에서 Run workflow |
+
+로컬에서 확인하려면 이 저장소 루트에서 다음 명령을 실행하십시오. Node.js 22 이상이 필요합니다.
+
+```bash
+npm install
+npm run docs:build
+npm run docs:preview
+```

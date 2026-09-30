@@ -1,0 +1,69 @@
+# devdog-docs 생성 파일. 저장소 목록을 바꾸면 vendor.py site로 다시 생성
+name: Documentation website
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [documentation-updated]
+  # 코드 저장소 문서 반영: 변경 알림 워크플로 미설치 저장소를 매시 17분에 재수집
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: documentation-pages
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: docs
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: Tech-Week-2026-KimEPark/Intro
+          ref: kth
+          token: ${{ secrets.DOCS_SOURCE_TOKEN || github.token }}
+          path: PNU-TECHWEEK-260930
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: docs/.nvmrc
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check documents
+        working-directory: docs
+        run: python3 scripts/check_docs.py --workspace
+      - name: Build site
+        working-directory: docs
+        env:
+          DOCS_REQUIRE_CLEAN: '1'
+        run: |
+          npm ci
+          npm test
+          npm run docs:build
+          npx playwright install --with-deps chromium
+          npm run test:browser
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.site/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

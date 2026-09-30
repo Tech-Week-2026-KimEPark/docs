@@ -1,7 +1,25 @@
 {
   "files": {
     ".github/workflows/docs-check.yml": "7ad5210cf1f4cd41b7221662c13b79b4d9f966393a745122170dfc1d5ad273d6",
-    "scripts/check_docs.py": "8f1a0addd0b37b2cabb3ba97394a87fb7733972c83c39088e96ec2f52e824968"
+    ".github/workflows/docs-pages.yml": "c7e5562b253783f440b86b3ff4a8083313fde61bf7658396e138203ab30554fa",
+    ".nvmrc": "f14b4987904bcb5814e4459a057ed4d20f58a633152288a761214dcd28780b56",
+    "package-lock.json": "4bc1b630763515b69fa1dce18f2086d174a8056085ea477b4f770fc833ef2ce0",
+    "package.json": "5f2e30dac258b78d012dd5200cb34e4f2db9a555467ceb6eabade290d612dd26",
+    "playwright.config.mjs": "da4786970df075c582ff48a82cf35f85d3a70b037d360d275346840eb212e95f",
+    "scripts/check_docs.py": "8f1a0addd0b37b2cabb3ba97394a87fb7733972c83c39088e96ec2f52e824968",
+    "scripts/site/check-output.mjs": "23b9f389d221193c19219c2e29feb29db1a341a3952c7e03cca4a8fc67a353ff",
+    "scripts/site/config.mjs": "6632a9e1f3a9df8298f492507cdae0e168c402ff0897224242d3dbd1c091efc7",
+    "scripts/site/dev.mjs": "93f8a3ccc449c1896227f85e84a3155df1a0cf43d694a09d9a9425de20fb882e",
+    "scripts/site/library.mjs": "843f225f3664f129bdbd3114b07a6f388bbf52d1d878378c4620891bd075e866",
+    "scripts/site/prepare.mjs": "1f5b39e8645055160f1224db0b2fdb47307fce356b0b0d040739206e70d0e8dd",
+    "scripts/site/preview.mjs": "0a9220a8407f566fee278189c1b30a8fb2bd877dad1f8cd57836c652997f6cf4",
+    "site/.vitepress/config.mts": "d888d31d27fcaeec341ddafc94e4de3fdb6775252835317f257684f2c576d30a",
+    "site/.vitepress/theme/MermaidDiagram.vue": "d93d39f006b054b7a05d7b5e35a236b7fa38f33cbf69dca30d7e8aadfebb7608",
+    "site/.vitepress/theme/SourceInfo.vue": "98a7982c17b7782b2a3d75d315675ff4304a8a7bc23bc5afa2a42ec887118717",
+    "site/.vitepress/theme/index.ts": "a7859168166925390d399f97cc9ae56473462dcb0ffbae3ada85b2f2d9a7200e",
+    "site/.vitepress/theme/style.css": "789225a79be369314f1db784d005a1e17b2070ee11830ea9e4fb39e4f3eaf34e",
+    "tests/browser/site.spec.mjs": "b1e7ac83463e751aee6f86d01f118948af0d74656311c22cef2ba478bebfce47",
+    "tests/site/library.test.mjs": "6d6689734228ee353147fb69febc1b92bfcd6c5fdfd2996a5150be68ca08589b"
   },
   "version": "0.1.0"
 }
