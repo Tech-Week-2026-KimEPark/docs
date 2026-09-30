@@ -287,10 +287,16 @@ class GridMap:
     def to_world(self, row, col) -> tuple[float, float]
     def layers(self) -> tuple                      # (occ, blocked, soft, unknown) bool 배열
     def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...]
+    def public(self) -> np.ndarray                 # 공개값 격자 (-1/0/1). viz.render_map() 입력
+    def clearance(self) -> np.ndarray              # 가장 가까운 장애물까지 거리 [m]
 
 # planner.py
-def plan(grid, start_xy, goal_xy, allow_unknown=False) -> list[tuple] | None   # [(x, y), ...]
+def plan(grid, start_xy, goal_xy, allow_unknown=False, field=None) -> list[tuple] | None   # [(x, y), ...]
 def choose_frontier(grid, pose, blacklist) -> tuple | None                     # (x, y)
+class DistanceField:                               # 기준점 다익스트라 거리 지도
+    def __init__(self, grid, origin_xy)
+    def distance(self, xy) -> float | None         # 기준점까지 경로 비용 [m]
+    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로
 
 # local_control.py
 def pure_pursuit(pose, path, lookahead) -> tuple[float, float, bool]   # (v, w, reached)
@@ -326,7 +332,7 @@ sar-robot 코드와 문서는 이 문서 기준으로 변경했습니다. 모듈
 | 방향 범위 | `atan2(sin, cos)`로 $[-\pi, \pi]$ 정리 | sar-robot #5 |
 | 설정값 | 10장 설정값 전체. `GRID_RESOLUTION` → `MAP_RES` | sar-robot #5 |
 
-`grid_map.py`, `planner.py`, `perception.py`, `local_control.py`, `mission.py`, `viz.py`는 아직 구현 전입니다. 각 담당자는 7.2절 형식으로 구현하십시오.
+`grid_map.py`와 `planner.py`의 동작과 검증 결과는 [grid_map 기능 설명](../explanation/features/grid_map.md)과 [planner 기능 설명](../explanation/features/planner.md)에 있습니다. `public()`, `clearance()`, `DistanceField`, `plan()`의 `field` 인자는 기존 형식을 유지한 추가 인터페이스입니다. `mission.py`는 아직 구현 전입니다. 담당자는 7.2절 형식으로 구현하십시오.
 
 ## 8. 상태 머신
 

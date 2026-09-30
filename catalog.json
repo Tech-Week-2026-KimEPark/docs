@@ -51,6 +51,12 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/features/grid_map.md",
+      "title": "grid_map 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/features/hsv_tuner.md",
       "title": "hsv_tuner 기능 설명",
       "audience": "human",
@@ -59,6 +65,12 @@
     {
       "path": "human/explanation/features/perception.md",
       "title": "perception 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/features/planner.md",
+      "title": "planner 기능 설명",
       "audience": "human",
       "type": "explanation"
     },

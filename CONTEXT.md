@@ -126,8 +126,8 @@ controllers/sar_main/
   sar/config.py          (통합) 모든 설정값                                  [구현]
   sar/robot_io.py        (통합) Webots 장치 래핑. Webots API는 이 파일에서만 호출 [구현]
   sar/mission.py         (통합) 상태 머신                                    [미구현]
-  sar/grid_map.py        (계획) 점유 격자, 라이다 갱신, 팽창, 프론티어        [미구현]
-  sar/planner.py         (계획) A*, 프론티어 목표 선택                        [미구현]
+  sar/grid_map.py        (계획) 점유 격자, 라이다 갱신, 팽창, 프론티어        [구현]
+  sar/planner.py         (계획) A*, 다익스트라 프론티어 선택·복귀 거리 지도    [구현]
   sar/perception.py      (인지) YOLO11n 검출 + 색 판별, 거리·방위 추정, 연속 확인 [구현]
   sar/viz.py             (인지) 지도·궤적·구조 위치 그림 저장                  [구현]
   sar/odometry.py        (행동) 엔코더 오도메트리 + 방향 칼만 필터, (선택) 스캔-지도 매칭 [구현]
@@ -175,18 +175,27 @@ class Odometry:
     def heading_var(self) -> float                 # 방향 분산 P (디버깅·발표용)
     def correct(self, dx: float, dy: float, dth: float) -> None   # (선택) 스캔 매칭 보정값 적용
 
-# grid_map.py  [미구현]
+# grid_map.py
 class GridMap:
-    def update(self, pose, ranges) -> None
+    def __init__(self, center_x=config.START_X, center_y=config.START_Y, size=config.MAP_SIZE, res=config.MAP_RES)
+    def update(self, pose, ranges) -> None         # 매 step. pose·ranges가 None이면 무시
     def to_cell(self, x, y) -> tuple[int, int]     # (row, col)
-    def to_world(self, row, col) -> tuple[float, float]
+    def to_world(self, row, col) -> tuple[float, float]   # 칸 중심
     def layers(self) -> tuple                      # (occ, blocked, soft, unknown) bool 배열
-    def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...]
-    # viz.render_map()에 넘길 공개값 격자(-1/0/1)를 제공할 것
+    def frontiers(self) -> list                    # [(크기, [(row, col), ...]), ...] 크기 내림차순
+    def public(self) -> np.ndarray                 # 공개값 격자 int8 (-1/0/1). viz.render_map() 입력
+    def clearance(self) -> np.ndarray              # 가장 가까운 장애물까지 거리 [m]
 
-# planner.py  [미구현]
-def plan(grid, start_xy, goal_xy, allow_unknown=False) -> list[tuple] | None   # [(x, y), ...]
+# planner.py  (목표 1개: A*, 목표 여러 개: 다익스트라)
+def plan(grid, start_xy, goal_xy, allow_unknown=False, field=None) -> list[tuple] | None
+# [(x, y), ...] PATH_STEP 간격, 첫 점 = start_xy. 통과 불가 시작·목표는 SNAP_RADIUS 안 대체 칸 경유
+# field: goal_xy 기준 DistanceField를 주면 A* 휴리스틱으로 사용 (같은 비용, 계산 시간 감소)
 def choose_frontier(grid, pose, blacklist) -> tuple | None                     # (x, y)
+# 로봇 기준 다익스트라로 점수 = 묶음 크기 / 경로 거리 최대 칸 선택. 상한 도달 시 조기 종료
+class DistanceField:                               # 기준점 다익스트라 1회
+    def __init__(self, grid, origin_xy)            # RETURN: origin = 시작점, 2초 주기 갱신
+    def distance(self, xy) -> float | None         # 기준점까지 경로 비용 [m] (RETURN_RESERVE 판단)
+    def path(self, xy) -> list[tuple] | None       # xy → 기준점 경로. 모르는 칸 통과 허용
 
 # local_control.py
 def pure_pursuit(pose, path, lookahead=config.LOOKAHEAD) -> tuple[float, float, bool]   # (v, w, reached)
@@ -333,6 +342,19 @@ OCC_THRESHOLD = 0.3           # 이보다 크면 장애물 (확률 약 0.57)
 LIDAR_MIN, LIDAR_MAX = 0.12, 3.5
 INFLATE = ROBOT_RADIUS + 0.07
 MIN_FRONTIER_CELLS = 6
+MAP_SIZE = 32.0               # m, 시작점 중심 정사각형 지도 한 변
+RAY_STEP = MAP_RES / 2        # m, 라이다 광선 추적 표본 간격
+WALL_BAND = 0.20              # m, 팽창 영역 바깥 벽 근처 추가 비용 폭
+
+# 경로 계획
+WALL_COST = 2.0               # 벽 근처 칸 비용 배수 최대 증가량
+UNKNOWN_COST = 1.5            # allow_unknown일 때 모르는 칸 비용 배수
+PLAN_MARGIN = 1.0             # m, 계획 영역 = 확인 영역 + 여백
+SNAP_RADIUS = 0.5             # m, 통과 불가 시작·목표의 대체 칸 탐색 반경
+PATH_SMOOTH = True            # 시야선 경로 다듬기. False면 격자 경로
+PATH_STEP = 0.10              # m, 반환 경로 점 간격
+BLACKLIST_RADIUS = 0.5        # m, 블랙리스트 주변 프론티어 제외 반경
+FRONTIER_MIN_DIST = 0.3       # m, 이보다 가까운 프론티어 칸 제외
 
 # 위치 추정
 HEADING_Q = 0.01 ** 2         # 방향 예측 잡음 (한 스텝, rad^2)

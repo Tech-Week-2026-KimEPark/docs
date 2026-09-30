@@ -72,8 +72,12 @@ python3 scripts/check_docs.py --workspace
 
 ## 목록
 
-- [perception](perception.md): 빨간 사과 검출, 거리·방위각, 연속 확인, 대상 월드 좌표
-- [viz](viz.md): 지도·궤적·구조 위치 그림 저장
-- [hsv_tuner](hsv_tuner.md): HSV 임계값 튜닝, 인식 성능 측정, 자동 접근·회전 측정
+| 문서 | 모듈 | 담당 | 내용 |
+|---|---|---|---|
+| [grid_map 기능 설명](grid_map.md) | `sar/grid_map.py` | 계획 | 라이다 log-odds 점유 격자, 장애물 팽창, 프론티어 검출 |
+| [planner 기능 설명](planner.md) | `sar/planner.py` | 계획 | A\* 경로, 다익스트라 프론티어 선택, 복귀 거리 지도 |
+| [perception 기능 설명](perception.md) | `sar/perception.py` | 인지 | 빨간 사과 검출, 거리·방위각, 연속 확인, 대상 월드 좌표 |
+| [viz 기능 설명](viz.md) | `sar/viz.py` | 인지 | 지도·궤적·구조 위치 그림 저장 |
+| [hsv_tuner 기능 설명](hsv_tuner.md) | `controllers/hsv_tuner/` | 인지 | HSV 임계값 튜닝, 인식 성능 측정, 자동 접근·회전 측정 |
 
 2026-09-30까지 병합된 기능의 분석은 [sar-robot 병합 내용 분석](../sar-robot-병합-분석.md)에 있습니다.
