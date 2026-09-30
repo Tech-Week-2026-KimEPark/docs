@@ -57,8 +57,26 @@
       "type": "explanation"
     },
     {
+      "path": "human/explanation/features/hsv_tuner.md",
+      "title": "hsv_tuner 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/features/perception.md",
+      "title": "perception 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
       "path": "human/explanation/features/planner.md",
       "title": "planner 기능 설명",
+      "audience": "human",
+      "type": "explanation"
+    },
+    {
+      "path": "human/explanation/features/viz.md",
+      "title": "viz 기능 설명",
       "audience": "human",
       "type": "explanation"
     },
